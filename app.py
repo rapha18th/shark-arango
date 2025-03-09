@@ -179,7 +179,7 @@ with tab2:
     st.subheader("Investor-Startup Network")
     graph_query = """
     FOR edge IN investments
-        LIMIT 50  # Limit for performance
+        LIMIT 50
         RETURN {
             source: SPLIT(edge._from, '/')[1],
             target: SPLIT(edge._to, '/')[1],
