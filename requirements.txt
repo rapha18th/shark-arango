@@ -1,0 +1,8 @@
+streamlit
+langchain
+google-generativeai
+langchain-community
+langchain-google-genai
+pyArango
+plotly
+networkx
