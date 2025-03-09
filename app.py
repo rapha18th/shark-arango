@@ -2,11 +2,12 @@ import streamlit as st
 import networkx as nx
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from pyArango.connection import Connection
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.graphs import ArangoGraph
+from langchain.chains import ArangoGraphQAChain
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import create_arango_graph_qna_chain
 
 # Initialize Google Gemini
 llm = ChatGoogleGenerativeAI(
@@ -51,7 +52,7 @@ with tab1:
     )
     
     # LangChain Q&A Chain
-    chain = create_arango_graph_qna_chain(llm, graph)
+    chain = ArangoGraphQAChain.from_llm(llm, graph=graph)
     
     # Display Chat History
     for message in st.session_state.chat_history:
@@ -68,29 +69,36 @@ with tab1:
         
         # Process with LangChain
         try:
-            response = chain.invoke({"query": user_query})
+            response = chain.run(user_query)
             
             with st.chat_message("assistant"):
                 # Enhanced response formatting
-                if "result" in response:
-                    if isinstance(response["result"], list):
-                        df = pd.DataFrame(response["result"])
-                        st.dataframe(df)
-                        st.session_state.chat_history.append({
-                            "role": "assistant",
-                            "content": f"Found {len(df)} results"
-                        })
+                if isinstance(response, dict):
+                    if "result" in response:
+                        if isinstance(response["result"], list):
+                            df = pd.DataFrame(response["result"])
+                            st.dataframe(df)
+                            st.session_state.chat_history.append({
+                                "role": "assistant",
+                                "content": f"Found {len(df)} results"
+                            })
+                        else:
+                            st.write(response["result"])
+                            st.session_state.chat_history.append({
+                                "role": "assistant",
+                                "content": response["result"]
+                            })
                     else:
-                        st.write(response["result"])
+                        st.write(response)
                         st.session_state.chat_history.append({
                             "role": "assistant",
-                            "content": response["result"]
+                            "content": str(response)
                         })
                 else:
                     st.write(response)
                     st.session_state.chat_history.append({
                         "role": "assistant",
-                        "content": str(response)
+                        "content": response
                     })
         
         except Exception as e:
