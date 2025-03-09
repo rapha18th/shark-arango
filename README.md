@@ -13,3 +13,10 @@ This Streamlit application provides a platform for analyzing and interacting wit
 
    ```bash
    pip install streamlit arango langchain langchain-community langchain-google-genai pyArango plotly networkx
+
+2. **Environment Variable**
+[ARANGO_URL] ="your_url"
+[ARANGO_USER] = "root"
+[ARANGO_PASSWORD] = "your_password"
+[DB_NAME] = "your_db"
+[GOOGLE_API_KEY]="your_gemini_api_key
