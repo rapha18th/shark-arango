@@ -25,7 +25,7 @@ arangoURL=os.environ["ARANGO_URL"]
 username=os.environ["ARANGO_USER"]
 password=os.environ["ARANGO_PASSWORD"]
 dbName=os.environ["DB_NAME"]
-    
+
 
 # Streamlit App Configuration
 st.set_page_config(page_title="Shark Tank Analytics", layout="wide")
@@ -41,37 +41,36 @@ tab1, tab2 = st.tabs(["Chat Interface", "Analytics Dashboard"])
 # Chat Tab
 with tab1:
     st.header("Chat with Shark Tank Data")
-    
+
     # Chat Input
     user_query = st.chat_input("Ask about investments, sharks, or startups...")
-    
+
     # Initialize ArangoGraph
     db = ArangoClient(hosts=arangoURL).db(dbName,
      username, password, verify=True)
-   
+
     graph = ArangoGraph(db)
-    
+
     # LangChain Q&A Chain
     chain = ArangoGraphQAChain.from_llm(llm, graph=graph,allow_dangerous_requests=True)
-    
+
     # Display Chat History in reverse order (latest messages at the top)
     for message in reversed(st.session_state.chat_history):
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-    
+
     # Process Query
     if user_query:
         # Add user message to history
         st.session_state.chat_history.append({"role": "user", "content": user_query})
-        
+
         with st.chat_message("user"):
             st.markdown(user_query)
-        
+
         # Process with LangChain
         try:
-            chain.top_k = 3
             response = chain.run(user_query)
-            
+
             with st.chat_message("assistant"):
                 # Enhanced response formatting
                 if isinstance(response, dict):
@@ -101,7 +100,7 @@ with tab1:
                         "role": "assistant",
                         "content": response
                     })
-        
+
         except Exception as e:
             st.error(f"Error processing query: {str(e)}")
             st.session_state.chat_history.append({
@@ -112,16 +111,16 @@ with tab1:
 # Dashboard Tab
 with tab2:
     st.header("Investment Analytics Dashboard")
-    
+
     # Fetch data for visualizations
     conn = Connection(
        arangoURL=arangoURL,
-       username=username, 
+       username=username,
        password=password
     )
     db_name = dbName
     db = conn[db_name]
-    
+
     # Investment Amount Distribution
     st.subheader("Investment Distribution")
     investment_query = """
@@ -138,7 +137,7 @@ with tab2:
                 flat_investments.extend(item)
             else:
                 flat_investments.append(item)
-                
+
         df_investments = pd.DataFrame({'investment_amount': flat_investments})
         fig = px.histogram(
             df_investments,
@@ -148,7 +147,7 @@ with tab2:
             title="Distribution of Investment Amounts"
         )
         st.plotly_chart(fig, use_container_width=True)
-    
+
     # Shark Activity
     st.subheader("Shark Investment Activity")
     shark_query = """
@@ -175,7 +174,7 @@ with tab2:
             barmode="group"
         )
         st.plotly_chart(fig, use_container_width=True)
-    
+
     # Network Visualization
     st.subheader("Investor-Startup Network")
     graph_query = """
@@ -194,7 +193,7 @@ with tab2:
             target="target",
             edge_attr="amount"
         )
-        
+
         # Plotly network visualization
         pos = nx.spring_layout(G)
         edge_x = []
@@ -204,14 +203,14 @@ with tab2:
             x1, y1 = pos[edge[1]]
             edge_x.extend([x0, x1, None])
             edge_y.extend([y0, y1, None])
-        
+
         edge_trace = go.Scatter(
             x=edge_x, y=edge_y,
             line=dict(width=0.5, color='#888'),
             hoverinfo='none',
             mode='lines'
         )
-        
+
         node_x = []
         node_y = []
         text = []
@@ -220,7 +219,7 @@ with tab2:
             node_x.append(x)
             node_y.append(y)
             text.append(node)
-        
+
         node_trace = go.Scatter(
             x=node_x, y=node_y,
             mode='markers+text',
@@ -234,7 +233,7 @@ with tab2:
                 line_width=2
             )
         )
-        
+
         fig = go.Figure(data=[edge_trace, node_trace],
                      layout=go.Layout(
                         showlegend=False,
