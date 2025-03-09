@@ -52,7 +52,7 @@ with tab1:
     graph = ArangoGraph(db)
     
     # LangChain Q&A Chain
-    chain = ArangoGraphQAChain.from_llm(llm, graph=graph)
+    chain = ArangoGraphQAChain.from_llm(llm, graph=graph,allow_dangerous_requests=True)
     
     # Display Chat History
     for message in st.session_state.chat_history:
