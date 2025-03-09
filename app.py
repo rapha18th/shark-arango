@@ -117,10 +117,9 @@ with tab2:
        arangoURL=arangoURL,
        username=username, 
        password=password
-)
+    )
     db_name = dbName
     db = conn[db_name]
-   
     
     # Investment Amount Distribution
     st.subheader("Investment Distribution")
@@ -130,10 +129,16 @@ with tab2:
     """
     investments = db.AQLQuery(investment_query, rawResults=True)
     if investments:
+        st.write("Sample investment data:", investments[:5])
+        # If data is returned as a list of lists, flatten it
+        if isinstance(investments[0], list):
+            investments = [item[0] if isinstance(item, list) else item for item in investments]
+        df_investments = pd.DataFrame({'investment_amount': investments})
         fig = px.histogram(
-            x=investments,
+            df_investments,
+            x="investment_amount",
             nbins=20,
-            labels={"x": "Investment Amount"},
+            labels={"investment_amount": "Investment Amount"},
             title="Distribution of Investment Amounts"
         )
         st.plotly_chart(fig, use_container_width=True)
@@ -198,7 +203,8 @@ with tab2:
             x=edge_x, y=edge_y,
             line=dict(width=0.5, color='#888'),
             hoverinfo='none',
-            mode='lines')
+            mode='lines'
+        )
         
         node_x = []
         node_y = []
@@ -219,17 +225,21 @@ with tab2:
                 colorscale='YlGnBu',
                 size=10,
                 color=[],
-                line_width=2))
+                line_width=2
+            )
+        )
         
         fig = go.Figure(data=[edge_trace, node_trace],
                      layout=go.Layout(
                         showlegend=False,
                         hovermode='closest',
-                        margin=dict(b=20,l=5,r=5,t=40),
+                        margin=dict(b=20, l=5, r=5, t=40),
                         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
+                        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+                     )
                     )
         st.plotly_chart(fig, use_container_width=True)
+        
 
 # Instructions for Setup
 """
