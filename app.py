@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from pyArango.connection import Connection
+from arango import ArangoClient
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.graphs import ArangoGraph
 from langchain.chains import ArangoGraphQAChain
@@ -25,6 +26,7 @@ def get_arangodb_connection():
         arangoURL=os.environ["ARANGO_URL"],
         username=os.environ["ARANGO_USER"],
         password=os.environ["ARANGO_PASSWORD"]
+        dbName=os.environ["DB_NAME"]
     )
 
 # Streamlit App Configuration
@@ -46,9 +48,9 @@ with tab1:
     user_query = st.chat_input("Ask about investments, sharks, or startups...")
     
     # Initialize ArangoGraph
-    conn=get_arangodb_connection()
-    db_name = "shark_database"
-    db= conn[db_name]
+    db = ArangoClient(hosts=arangoURL).db(dbName,
+     username, password, verify=True))
+   
     graph = ArangoGraph(db)
     
     # LangChain Q&A Chain
