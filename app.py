@@ -46,9 +46,10 @@ with tab1:
     user_query = st.chat_input("Ask about investments, sharks, or startups...")
     
     # Initialize ArangoGraph
-    graph = ArangoGraph(
-        connection=get_arangodb_connection()
-    )
+    conn=get_arangodb_connection()
+    db_name = "shark_database"
+    db_a = conn[db_name]
+    graph = ArangoGraph(db_a)
     
     # LangChain Q&A Chain
     chain = ArangoGraphQAChain.from_llm(llm, graph=graph)
