@@ -8,3 +8,4 @@ adb-cloud-connector
 python-arango
 plotly
 networkx
+scipy
