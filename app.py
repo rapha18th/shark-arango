@@ -54,8 +54,8 @@ with tab1:
     # LangChain Q&A Chain
     chain = ArangoGraphQAChain.from_llm(llm, graph=graph,allow_dangerous_requests=True)
     
-    # Display Chat History
-    for message in st.session_state.chat_history:
+    # Display Chat History in reverse order (latest messages at the top)
+    for message in reversed(st.session_state.chat_history):
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
     
