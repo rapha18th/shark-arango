@@ -48,8 +48,8 @@ with tab1:
     # Initialize ArangoGraph
     conn=get_arangodb_connection()
     db_name = "shark_database"
-    db_a = conn[db_name]
-    graph = ArangoGraph(db_a)
+    db= conn[db_name]
+    graph = ArangoGraph(db)
     
     # LangChain Q&A Chain
     chain = ArangoGraphQAChain.from_llm(llm, graph=graph)
