@@ -179,7 +179,6 @@ with tab2:
     st.subheader("Investor-Startup Network")
     graph_query = """
     FOR edge IN investments
-        LIMIT 50
         RETURN {
             source: SPLIT(edge._from, '/')[1],
             target: SPLIT(edge._to, '/')[1],
@@ -245,19 +244,3 @@ with tab2:
                      )
                     )
         st.plotly_chart(fig, use_container_width=True)
-
-# Instructions for Setup
-"""
-To run this app:
-
-1. Install dependencies:
-pip install streamlit langchain-google-genai pyArango plotly networkx
-
-2. Create a .streamlit/secrets.toml file with:
-[ARANGO_URL]
-ARANGO_USER = "root"
-ARANGO_PASSWORD = "your_password"
-
-3. Run with:
-streamlit run shark_tank_app.py
-"""
