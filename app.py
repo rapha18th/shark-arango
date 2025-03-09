@@ -114,7 +114,7 @@ with tab2:
     
     # Fetch data for visualizations
     conn = Connection(
-       arangoURL=arangoURL 
+       arangoURL=arangoURL,
        username=username, 
        password=password
 )
