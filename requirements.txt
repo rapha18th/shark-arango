@@ -4,5 +4,7 @@ google-generativeai
 langchain-community
 langchain-google-genai
 pyArango
+adb-cloud-connector
+python-arango
 plotly
 networkx
