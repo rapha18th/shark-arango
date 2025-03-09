@@ -131,8 +131,6 @@ with tab2:
     if investments:
         st.write("Sample investment data:", investments[:5])
         # Flatten the result in case each element is a list.
-        # For example, if investments is a list of 100 elements,
-        # and each element is a list of numbers, flatten them into one list.
         flat_investments = []
         for item in investments:
             if isinstance(item, list):
@@ -153,6 +151,7 @@ with tab2:
     # Shark Activity
     st.subheader("Shark Investment Activity")
     shark_query = """
+    WITH startups
     FOR shark IN investors
         LET deals = (
             FOR v IN 1..1 OUTBOUND shark investments
