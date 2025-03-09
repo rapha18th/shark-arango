@@ -130,10 +130,17 @@ with tab2:
     investments = db.AQLQuery(investment_query, rawResults=True)
     if investments:
         st.write("Sample investment data:", investments[:5])
-        # If the first element is a list, flatten the result completely.
-        if isinstance(investments[0], list):
-            investments = [x for sublist in investments for x in (sublist if isinstance(sublist, list) else [sublist])]
-        df_investments = pd.DataFrame({'investment_amount': investments})
+        # Flatten the result in case each element is a list.
+        # For example, if investments is a list of 100 elements,
+        # and each element is a list of numbers, flatten them into one list.
+        flat_investments = []
+        for item in investments:
+            if isinstance(item, list):
+                flat_investments.extend(item)
+            else:
+                flat_investments.append(item)
+                
+        df_investments = pd.DataFrame({'investment_amount': flat_investments})
         fig = px.histogram(
             df_investments,
             x="investment_amount",
@@ -239,11 +246,6 @@ with tab2:
                      )
                     )
         st.plotly_chart(fig, use_container_width=True)
-    
-# Note:
-# The 1131 edges in your network visualization are unrelated to the histogram error.
-# The histogram error was due to the investment amounts data structure not being a flat list.
-        
 
 # Instructions for Setup
 """
