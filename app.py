@@ -8,14 +8,15 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.graphs import ArangoGraph
 from langchain.chains import ArangoGraphQAChain
 from langchain_core.prompts import ChatPromptTemplate
+import os
 
 # Initialize Google Gemini
 llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro",
+    model="gemini-2.0-flash-think-exp",
     temperature=0,
     max_tokens=None,
     timeout=None,
-    max_retries=2
+    max_retries=2,
 )
 
 # ArangoDB Connection
