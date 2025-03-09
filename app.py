@@ -21,13 +21,11 @@ llm = ChatGoogleGenerativeAI(
 )
 
 # ArangoDB Connection
-def get_arangodb_connection():
-    return Connection(
-        arangoURL=os.environ["ARANGO_URL"],
-        username=os.environ["ARANGO_USER"],
-        password=os.environ["ARANGO_PASSWORD"],
-        dbName=os.environ["DB_NAME"]
-    )
+arangoURL=os.environ["ARANGO_URL"]
+username=os.environ["ARANGO_USER"]
+password=os.environ["ARANGO_PASSWORD"]
+dbName=os.environ["DB_NAME"]
+    
 
 # Streamlit App Configuration
 st.set_page_config(page_title="Shark Tank Analytics", layout="wide")
