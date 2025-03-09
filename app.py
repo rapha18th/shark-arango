@@ -13,7 +13,7 @@ import os
 
 # Initialize Google Gemini
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash-think-exp",
+    model="gemini-2.0-flash-thinking-exp",
     temperature=0,
     max_tokens=None,
     timeout=None,
