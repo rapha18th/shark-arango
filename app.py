@@ -49,7 +49,7 @@ with tab1:
     
     # Initialize ArangoGraph
     db = ArangoClient(hosts=arangoURL).db(dbName,
-     username, password, verify=True))
+     username, password, verify=True)
    
     graph = ArangoGraph(db)
     
