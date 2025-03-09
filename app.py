@@ -113,8 +113,9 @@ with tab2:
     st.header("Investment Analytics Dashboard")
     
     # Fetch data for visualizations
-    conn = get_arangodb_connection()
-    db = conn["shark_database"]
+    db = ArangoClient(hosts=arangoURL).db(dbName,
+     username, password, verify=True)
+   
     
     # Investment Amount Distribution
     st.subheader("Investment Distribution")
