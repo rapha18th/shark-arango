@@ -23,7 +23,7 @@ def get_arangodb_connection():
     return Connection(
         arangoURL=os.environ["ARANGO_URL"],
         username=os.environ["ARANGO_USER"],
-        password=os.environ["ARANGO_PASSWORD"]
+        password=os.environ["ARANGO_PASSWORD"],
         dbName="shark_database"
     )
 
