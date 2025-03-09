@@ -21,9 +21,10 @@ llm = ChatGoogleGenerativeAI(
 # ArangoDB Connection
 def get_arangodb_connection():
     return Connection(
-        arangoURL=st.secrets["ARANGO_URL"],
-        username=st.secrets["ARANGO_USER"],
-        password=st.secrets["ARANGO_PASSWORD"]
+        arangoURL=os.environ["ARANGO_URL"],
+        username=os.environ["ARANGO_USER"],
+        password=os.environ["ARANGO_PASSWORD"]
+        dbName="shark_database"
     )
 
 # Streamlit App Configuration
@@ -46,8 +47,6 @@ with tab1:
     
     # Initialize ArangoGraph
     graph = ArangoGraph(
-        db_name="shark_database",
-        graph_name="SharkTankGraph",
         connection=get_arangodb_connection()
     )
     
