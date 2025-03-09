@@ -69,6 +69,7 @@ with tab1:
         
         # Process with LangChain
         try:
+            chain.top_k = 3
             response = chain.run(user_query)
             
             with st.chat_message("assistant"):
